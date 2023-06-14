@@ -27,10 +27,10 @@ L2_DICT: None
 
 L1_TOKENIZER: MTUOC_tokenizer_eng.py
 TOKENIZE_L1: False
-L2_TOKENIZER: MTUOC_tokenizer_spa.py
-TOKENIZE_L2: False
 L3_TOKENIZER: MTUOC_tokenizer_spa.py
 TOKENIZE_L3: False
+L2_TOKENIZER: MTUOC_tokenizer_spa.py
+TOKENIZE_L2: False
 
 ###PREPARATION
 REPLACE_EMAILS: True
