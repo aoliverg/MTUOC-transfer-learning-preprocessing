@@ -242,7 +242,7 @@ def guided_alignment_eflomal(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT
             os.remove(file)
   
 
-stream = open('config-corpus-preprocessing.yaml', 'r',encoding="utf-8")
+stream = open('config-transfer-learning-preprocessing.yaml', 'r',encoding="utf-8")
 config=yaml.load(stream, Loader=yaml.FullLoader)
 
 MTUOC=config["MTUOC"]
