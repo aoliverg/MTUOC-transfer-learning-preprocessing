@@ -288,9 +288,6 @@ def guided_alignment_eflomal(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT
   
 
 
-from MTUOC_train_truecaser import TC_Trainer
-from MTUOC_truecaser import Truecaser
-from MTUOC_splitnumbers import splitnumbers
 
 
 
@@ -298,6 +295,11 @@ stream = open('config-transfer-learning-preprocessing.yaml', 'r',encoding="utf-8
 config=yaml.load(stream, Loader=yaml.FullLoader)
 MTUOC=config["MTUOC"]
 sys.path.append(MTUOC)
+
+
+from MTUOC_train_truecaser import TC_Trainer
+from MTUOC_truecaser import Truecaser
+from MTUOC_splitnumbers import splitnumbers
 
 VERBOSE=config["VERBOSE"]
 LOGFILE=config["LOG_FILE"]
