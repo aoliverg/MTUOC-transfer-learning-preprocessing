@@ -158,11 +158,56 @@ def sentencepiece_encode(corpusPre,OUTFILE,SP_MODEL,VOCABULARY,VOCABULARY_THRESH
         extraoptions=""
     command="spm_encode --model="+SP_MODEL+" "+extraoptions+" --vocabulary="+VOCABULARY+" --vocabulary_threshold="+str(VOCABULARY_THRESHOLD)+" < "+corpusPre+" > "+OUTFILE
     os.system(command)
+def check_guided_alignment(SLcorpus,TLcorpus,forwardalignment):
+    copyfile(SLcorpus,"slcorpustemp.txt")
+    copyfile(TLcorpus,"tlcorpustemp.txt")
+    copyfile(forwardalignment,"forwardalignmenttemp.txt")
+    
+    slcorpus=codecs.open("slcorpustemp.txt","r",encoding="utf-8")
+    tlcorpus=codecs.open("tlcorpustemp.txt","r",encoding="utf-8")
+    alignforward=codecs.open("forwardalignmenttemp.txt","r",encoding="utf-8")
+
+
+    slcorpusmod=codecs.open(SLcorpus,"w",encoding="utf-8")
+    tlcorpusmod=codecs.open(TLcorpus,"w",encoding="utf-8")
+    alignforwardmod=codecs.open(forwardalignment,"w",encoding="utf-8")
+    
+    
+    
+    
+    cont=0
+    while 1:
+        cont+=1
+        liniaSL=slcorpus.readline().rstrip()
+        if not liniaSL:
+            break
+        liniaTL=tlcorpus.readline().rstrip()
+        liniaalignforward=alignforward.readline().rstrip()
+
+        tokensSL=liniaSL.split(" ")
+        tokensTL=liniaTL.split(" ")
+        tokensAlignForward=liniaalignforward.split(" ")
+        
+        towrite=True
+        for token in tokensAlignForward:
+            camps=token.split("-")
+            if not len(camps)==2:
+                print("ERROR",cont)
+                towrite=False
+        
+        if towrite:
+            slcorpusmod.write(liniaSL+"\n")
+            tlcorpusmod.write(liniaTL+"\n")
+            alignforwardmod.write(liniaalignforward+"\n")
+    
+    os.remove("slcorpustemp.txt")
+    os.remove("tlcorpustemp.txt")
+    os.remove("forwardalignmenttemp.txt")
 
 def guided_alignment_fast_align(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT="train.sp",SL="en",TL="es",BOTH_DIRECTIONS=False,VERBOSE=True):
     if VERBOSE: print("Alignment using fast_align:",ROOTNAME_ALI,SL,TL)
     sys.path.append(MTUOC)
-    from MTUOC_check_guided_alignment import check_guided_alignment
+    #from MTUOC_check_guided_alignment import check_guided_alignment
     FILE1=ROOTNAME_ALI+"."+SL
     FILE2=ROOTNAME_ALI+"."+TL
     FILEOUT="corpus."+SL+"."+TL+"."+"fa"
@@ -242,7 +287,7 @@ def guided_alignment_eflomal(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT
             os.remove(file)
   
 
-stream = open('config-transfer-learning-preprocessing.yaml', 'r',encoding="utf-8")
+stream = open('config-corpus-preprocessing.yaml', 'r',encoding="utf-8")
 config=yaml.load(stream, Loader=yaml.FullLoader)
 
 MTUOC=config["MTUOC"]
