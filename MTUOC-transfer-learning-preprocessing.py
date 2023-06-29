@@ -158,7 +158,7 @@ def sentencepiece_encode(corpusPre,OUTFILE,SP_MODEL,VOCABULARY,VOCABULARY_THRESH
         extraoptions=""
     command="spm_encode --model="+SP_MODEL+" "+extraoptions+" --vocabulary="+VOCABULARY+" --vocabulary_threshold="+str(VOCABULARY_THRESHOLD)+" < "+corpusPre+" > "+OUTFILE
     os.system(command)
-def check_guided_alignment(SLcorpus,TLcorpus,forwardalignment):
+def check_guided_alignment_old(SLcorpus,TLcorpus,forwardalignment):
     copyfile(SLcorpus,"slcorpustemp.txt")
     copyfile(TLcorpus,"tlcorpustemp.txt")
     copyfile(forwardalignment,"forwardalignmenttemp.txt")
@@ -204,10 +204,10 @@ def check_guided_alignment(SLcorpus,TLcorpus,forwardalignment):
     os.remove("tlcorpustemp.txt")
     os.remove("forwardalignmenttemp.txt")
 
-def guided_alignment_fast_align(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT="train.sp",SL="en",TL="es",BOTH_DIRECTIONS=False,VERBOSE=True):
+def guided_alignment_fast_align_old(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT="train.sp",SL="en",TL="es",BOTH_DIRECTIONS=False,VERBOSE=True):
     if VERBOSE: print("Alignment using fast_align:",ROOTNAME_ALI,SL,TL)
     sys.path.append(MTUOC)
-    #from MTUOC_check_guided_alignment import check_guided_alignment
+    from MTUOC_check_guided_alignment import check_guided_alignment
     FILE1=ROOTNAME_ALI+"."+SL
     FILE2=ROOTNAME_ALI+"."+TL
     FILEOUT="corpus."+SL+"."+TL+"."+"fa"
@@ -249,7 +249,7 @@ def guided_alignment_fast_align(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_
     except:
         pass
 
-def guided_alignment_eflomal(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT="train.sp",SL="en",TL="es",SPLIT_LIMIT=1000000,VERBOSE=True):
+def guided_alignment_eflomal_old(MTUOC="/MTUOC",ROOTNAME_ALI="train.sp",ROOTNAME_OUT="train.sp",SL="en",TL="es",SPLIT_LIMIT=1000000,VERBOSE=True):
     if VERBOSE: print("Alignment using eflomal:",ROOTNAME_ALI,SL,TL)
     sys.path.append(MTUOC)
     from MTUOC_check_guided_alignment import check_guided_alignment
@@ -295,7 +295,9 @@ stream = open('config-transfer-learning-preprocessing.yaml', 'r',encoding="utf-8
 config=yaml.load(stream, Loader=yaml.FullLoader)
 MTUOC=config["MTUOC"]
 sys.path.append(MTUOC)
-
+from MTUOC_guided_alignment_eflomal import guided_alignment_eflomal
+from MTUOC_guided_alignment_fast_align import guided_alignment_fast_align
+from MTUOC_check_guided_alignment import check_guided_alignment
 
 from MTUOC_train_truecaser import TC_Trainer
 from MTUOC_truecaser import Truecaser
